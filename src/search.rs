@@ -7,7 +7,9 @@ use crate::coord::Coord;
 use crate::node::Node;
 use crate::grid::Grid;
 
+
 #[wasm_bindgen]
+#[derive(Deserialize)]
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,
 }
@@ -37,9 +39,10 @@ impl Search {
   }
 
   pub fn reached_destination(&self) -> bool {
-    match &self.end {
-      None => false,
-      Some(end) => self.start.eq(&end),
+    let end = self.peek();
+    match (self.end, end) {
+      (Some(dest), Some(curr)) => dest.matches(curr.x, curr.y),
+      _ => false,
     }
   }
 
@@ -48,18 +51,18 @@ impl Search {
     self.cache(node);
   }
 
-  pub fn cache(&mut self, node: Node) -> &Node {
+  pub fn cache(&mut self, node: Node) {
     match self.cache.remove(&node.y) {
       None => {
         let mut inner_hash = HashMap::new();
         inner_hash.insert(node.x, node);
         self.cache.insert(node.y, inner_hash);
       },
-      Some(inner_hash) => {
-        self.cache.insert(node.x, inner_hash);
+      Some(mut inner_hash) => {
+        inner_hash.insert(node.x, node);
+        self.cache.insert(node.y, inner_hash);
       },
     }
-    self.get_node(&node.x, &node.y).unwrap()
   }
 
   pub fn peek(&self) -> Option<&Node> {
@@ -70,10 +73,7 @@ impl Search {
   }
 
   pub fn pop(&mut self) -> Option<Node> {
-    match self.heap.pop() {
-      None => None,
-      Some(node) => self.remove_node(&node.x, &node.y),
-    }
+    self.heap.pop()
   }
 
   pub fn size(&self) -> usize {
@@ -88,13 +88,6 @@ impl Search {
     match self.cache.get(y) {
       None => None,
       Some(inner_hash) => inner_hash.get(x),
-    }
-  }
-
-  pub fn remove_node(&mut self, x: &i32, y: &i32) -> Option<Node> {
-    match self.cache.get_mut(y) {
-      None => None,
-      Some(inner_hash) => inner_hash.remove(x)
     }
   }
 
@@ -141,13 +134,13 @@ impl Search {
         Some(source_node),
         &adjacent_x,
         &adjacent_y,
-        adjacent_cost.unwrap()
+        adjacent_cost
       );
 
       if !adjacent_node.visited {
         self.push(adjacent_node);
-      } else if (source_node.cost + adjacent_cost.unwrap()) < adjacent_node.cost {
-        adjacent_node.cost = source_node.cost + adjacent_cost.unwrap();
+      } else if (source_node.cost + adjacent_cost) < adjacent_node.cost {
+        adjacent_node.cost = source_node.cost + adjacent_cost;
         adjacent_node.parent = Some(Coord::new(source_node.x, source_node.y));
         self.update(adjacent_node);
       }
@@ -164,13 +157,10 @@ impl Search {
   }
 }
 
-fn can_afford(node: &Node, cost: Option<&i32>, cost_threshold: Option<&i32>) -> bool {
+fn can_afford(node: &Node, cost: &i32, cost_threshold: Option<&i32>) -> bool {
   match cost_threshold {
     None => true,
-    Some(cost_threshold) => match cost {
-      None => false,
-      Some(cost) => node.cost + cost <= *cost_threshold,
-    }
+    Some(cost_threshold) => node.cost + cost <= *cost_threshold,
   }
 }
 

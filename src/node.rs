@@ -55,7 +55,11 @@ impl Node {
 
 impl Ord for Node {
   fn cmp(&self, other: &Self) -> Ordering {
-    self.guess_total_cost().cmp(&other.guess_total_cost())
+    match self.guess_total_cost().cmp(&other.guess_total_cost()) {
+      Ordering::Less => Ordering::Greater,
+      Ordering::Equal => Ordering::Equal,
+      Ordering::Greater => Ordering::Less,
+    }
   }
 }
 
