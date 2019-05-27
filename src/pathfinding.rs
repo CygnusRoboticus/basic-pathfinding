@@ -18,9 +18,17 @@ pub fn find_path_js(grid: &JsValue, start: &JsValue, end: &JsValue, opts: &JsVal
 }
 
 pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: Option<SearchOpts>) -> Option<Vec<Coord>> {
+  let end_on_unstoppable = match &opts {
+    None => false,
+    Some(opts) => match opts.end_on_unstoppable {
+      None => false,
+      Some(end_on_unstoppable) => end_on_unstoppable,
+    }
+  };
+
   if Coord::equals(Some(start), Some(end)) {
     Some(vec![])
-  } else if !grid.is_coord_stoppable(&end.x, &end.y) {
+  } else if !grid.is_coord_stoppable(&end.x, &end.y) & !end_on_unstoppable {
     None
   } else {
     let mut search = Search::new(start, Some(end), opts);

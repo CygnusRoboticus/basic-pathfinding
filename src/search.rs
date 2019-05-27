@@ -12,6 +12,7 @@ use crate::grid::Grid;
 #[derive(Deserialize)]
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,
+  pub end_on_unstoppable: Option<bool>,
 }
 
 pub struct Search {
@@ -30,10 +31,11 @@ impl Search {
       heap: BinaryHeap::new(),
       cache: HashMap::new(),
       opts: match opts {
+        Some(opts) => opts,
         None => SearchOpts {
           cost_threshold: None,
+          end_on_unstoppable: None,
         },
-        Some(opts) => opts,
       },
     }
   }

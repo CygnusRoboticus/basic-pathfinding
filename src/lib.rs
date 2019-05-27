@@ -1,4 +1,4 @@
-mod utils;
+pub mod utils;
 mod node;
 mod search;
 pub mod grid;

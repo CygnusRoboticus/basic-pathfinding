@@ -1,9 +1,7 @@
-use std::collections::HashMap;
-
 extern crate pathfinding;
 use pathfinding::grid::{Grid, GridType};
 use pathfinding::coord::Coord;
-use pathfinding::pathfinding::{find_path, find_walkable, SearchOpts};
+use pathfinding::pathfinding::{find_walkable, SearchOpts};
 
 macro_rules! hashmap {
   ($( $key: expr => $val: expr ),*) => {{
@@ -13,7 +11,6 @@ macro_rules! hashmap {
   }}
 }
 
-// find_walkable/3
 #[test]
 fn only_traverses_walkable_tiles() {
   let grid = Grid::new(
@@ -176,7 +173,7 @@ fn cancels_early_with_cost_threshold() {
   );
 
   let source = vec![Coord::new(1, 2)];
-  let opts = SearchOpts { cost_threshold: Some(1) };
+  let opts = SearchOpts { cost_threshold: Some(1), end_on_unstoppable: None };
   let path = find_walkable(&grid, source, Some(opts));
 
   assert_eq!(path, vec![
@@ -187,7 +184,7 @@ fn cancels_early_with_cost_threshold() {
   ]);
 
   let source = vec![Coord::new(1, 2)];
-  let opts = SearchOpts { cost_threshold: Some(4) };
+  let opts = SearchOpts { cost_threshold: Some(4), end_on_unstoppable: None };
   let path = find_walkable(&grid, source, Some(opts));
 
   assert_eq!(path, vec![
@@ -229,7 +226,7 @@ fn reports_start_only_when_cost_zero() {
   );
 
   let source = vec![Coord::new(1, 2)];
-  let opts = SearchOpts { cost_threshold: Some(0) };
+  let opts = SearchOpts { cost_threshold: Some(0), end_on_unstoppable: None };
   let path = find_walkable(&grid, source, Some(opts));
 
   assert_eq!(path, vec![
@@ -256,7 +253,7 @@ fn doesnt_include_unwalkable_start() {
   );
 
   let source = vec![Coord::new(1, 2)];
-  let opts = SearchOpts { cost_threshold: Some(4) };
+  let opts = SearchOpts { cost_threshold: Some(4), end_on_unstoppable: None };
   let path = find_walkable(&grid, source, Some(opts));
 
   assert_eq!(path, vec![]);

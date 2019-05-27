@@ -1,18 +1,7 @@
-//! Test suite for the Web and headless browsers.
-
-// #![cfg(target_arch = "wasm32")]
-
-// extern crate wasm_bindgen_test;
-// use wasm_bindgen_test::*;
-
-// wasm_bindgen_test_configure!(run_in_browser);
-
-use std::collections::HashMap;
-
 extern crate pathfinding;
 use pathfinding::grid::{Grid, GridType};
 use pathfinding::coord::Coord;
-use pathfinding::pathfinding::{find_path, find_walkable, SearchOpts};
+use pathfinding::pathfinding::{find_path, SearchOpts};
 
 macro_rules! hashmap {
   ($( $key: expr => $val: expr ),*) => {{
@@ -22,7 +11,6 @@ macro_rules! hashmap {
   }}
 }
 
-// find_path/4
 #[test]
 fn traverses_walkable_tiles() {
   let grid = Grid::new(
@@ -194,6 +182,38 @@ fn none_when_target_unstoppable() {
 }
 
 #[test]
+fn accepts_opt_to_end_on_unstoppable() {
+  let grid = Grid::new(
+    vec![
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+    ],
+    vec![1],
+    hashmap![],
+    hashmap![],
+    hashmap![2 => hashmap![2 => true]],
+    hashmap![],
+    GridType::Cardinal,
+  );
+
+  let start = Coord::new(0, 2);
+  let end = Coord::new(4, 2);
+  let opts = SearchOpts { cost_threshold: None, end_on_unstoppable: Some(true) };
+  let path = find_path(&grid, start, end, Some(opts));
+
+  assert_eq!(path.unwrap(), vec![
+    Coord::new(0, 2),
+    Coord::new(1, 2),
+    Coord::new(2, 2),
+    Coord::new(3, 2),
+    Coord::new(4, 2)
+  ]);
+}
+
+#[test]
 fn prefers_straight_paths() {
   let grid = Grid::new(
     vec![
@@ -314,12 +334,12 @@ fn path_cancels_early_with_cost_threshold() {
   );
   let start = Coord::new(1, 2);
   let end = Coord::new(3, 2);
-  let mut opts = SearchOpts { cost_threshold: Some(3) };
+  let mut opts = SearchOpts { cost_threshold: Some(3), end_on_unstoppable: None };
   let path = find_path(&grid, start, end, Some(opts));
 
   assert!(path.is_none());
 
-  opts = SearchOpts { cost_threshold: Some(4) };
+  opts = SearchOpts { cost_threshold: Some(4), end_on_unstoppable: None };
   let path = find_path(&grid, start, end, Some(opts));
 
   assert_eq!(path.unwrap(), vec![
