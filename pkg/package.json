@@ -1,0 +1,15 @@
+{
+  "name": "pathfinding",
+  "collaborators": [
+    "CygnusRoboticus <joshuadaleharris@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "pathfinding_bg.wasm",
+    "pathfinding.js",
+    "pathfinding.d.ts"
+  ],
+  "module": "pathfinding.js",
+  "types": "pathfinding.d.ts",
+  "sideEffects": "false"
+}
