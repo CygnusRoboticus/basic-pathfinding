@@ -1,10 +1,16 @@
 use wasm_bindgen::prelude::*;
+use std::collections::HashMap;
 
 use crate::coord::Coord;
 use crate::grid::Grid;
 use crate::search::Search;
 pub use crate::search::SearchOpts;
 
+#[wasm_bindgen]
+extern "C" {
+  #[wasm_bindgen(js_namespace = console)]
+  fn log(s: &JsValue);
+}
 
 #[wasm_bindgen]
 pub fn find_path_js(grid: &JsValue, start: &JsValue, end: &JsValue, opts: &JsValue) -> JsValue {
@@ -75,10 +81,27 @@ pub fn find_walkable(grid: &Grid, source: Vec<Coord>, opts: Option<SearchOpts>) 
 }
 
 #[wasm_bindgen]
-pub fn to_coord_map(coords: &JsValue) -> JsValue {
+pub fn to_coord_map_js(coords: &JsValue) -> JsValue {
   let coords: Vec<Coord> = coords.into_serde().unwrap();
-  let hash = Grid::to_coord_map(coords);
+  let hash = to_coord_map(coords);
   JsValue::from_serde(&hash).unwrap()
+}
+
+pub fn to_coord_map(coords: Vec<Coord>) -> HashMap<i32, HashMap<i32, bool>> {
+  let hash = &mut HashMap::new();
+  for Coord{x, y} in coords {
+    match hash.get_mut(&y) {
+      None => {
+        let mut inner_hash = HashMap::new();
+        inner_hash.insert(x, true);
+        hash.insert(y, inner_hash);
+      },
+      Some(inner_hash) => {
+        inner_hash.insert(x, true);
+      },
+    };
+  }
+  hash.to_owned()
 }
 
 fn calculate(search: &mut Search, grid: &Grid) {

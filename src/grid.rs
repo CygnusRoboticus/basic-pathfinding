@@ -1,10 +1,8 @@
 use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 
-use crate::coord::Coord;
-
 #[wasm_bindgen]
-#[derive(Copy, Clone, Deserialize)]
+#[derive(Copy, Clone, Serialize, Deserialize, Debug)]
 pub enum GridType {
   Cardinal,
   Hex,
@@ -12,7 +10,7 @@ pub enum GridType {
 }
 
 #[wasm_bindgen]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Grid {
   tiles: Vec<Vec<i32>>,
   walkable_tiles: Vec<i32>,
@@ -108,23 +106,6 @@ impl Grid {
       Some(inner_hash) => inner_hash.get(&x),
       _ => None,
     }
-  }
-
-  pub fn to_coord_map(coords: Vec<Coord>) -> HashMap<i32, HashMap<i32, bool>> {
-    let hash = &mut HashMap::new();
-    for Coord{x, y} in coords {
-      match hash.get_mut(&x) {
-        None => {
-          let mut inner_hash = HashMap::new();
-          inner_hash.insert(x, true);
-          hash.insert(y, inner_hash);
-        },
-        Some(inner_hash) => {
-          inner_hash.insert(x, true);
-        },
-      };
-    }
-    hash.to_owned()
   }
 }
 
