@@ -1,19 +1,30 @@
 /* tslint:disable */
 /**
+* @param {any} grid 
+* @param {any} start 
+* @param {any} end 
+* @param {any} opts 
+* @returns {any} 
 */
-export function find_path_js(grid: Grid, start: Coord, end: Coord, opts: SearchOpts): Coords[] | null;
+export function findPath(grid: any, start: any, end: any, opts: any): any;
 /**
+* @param {any} grid 
+* @param {any} source 
+* @param {any} opts 
+* @returns {any} 
 */
-export function find_walkable_js(grid: Grid, source: Coord[], opts: SearchOpts): Coord[];
+export function findWalkable(grid: any, source: any, opts: any): any;
 /**
+* @param {any} coords 
+* @returns {any} 
 */
-export function to_coord_map_js(coords: Coord[]): any;
+export function toCoordMap(coords: any): any;
 /**
 */
 export enum GridType {
-  Cardinal = "Cardinal",
-  Hex = "Hex",
-  Intercardinal = "Intercardinal",
+  Cardinal,
+  Hex,
+  Intercardinal,
 }
 /**
 */
@@ -26,18 +37,11 @@ export class Coord {
 */
 export class Grid {
   free(): void;
-  tiles: number[][];
-  walkable_tiles: number[];
-  costs: { [tile: number]: number | undefined; };
-  extra_costs: { [y: number]: { [x: number]: number | undefined } | undefined; };
-  unstoppable_coords: { [y: number]: { [x: number]: boolean | undefined } | undefined; };
-  unwalkable_coords: { [y: number]: { [x: number]: boolean | undefined } | undefined; };
-  grid_type: GridType;
 }
 /**
 */
 export class SearchOpts {
   free(): void;
-  cost_threshold?: number;
-  end_on_unstoppable?: boolean;
+  cost_threshold: number;
+  end_on_unstoppable: boolean;
 }

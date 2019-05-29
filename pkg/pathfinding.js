@@ -36,9 +36,9 @@ function takeObject(idx) {
 * @param {any} opts
 * @returns {any}
 */
-export function find_path_js(grid, start, end, opts) {
+export function findPath(grid, start, end, opts) {
     try {
-        return takeObject(wasm.find_path_js(addBorrowedObject(grid), addBorrowedObject(start), addBorrowedObject(end), addBorrowedObject(opts)));
+        return takeObject(wasm.findPath(addBorrowedObject(grid), addBorrowedObject(start), addBorrowedObject(end), addBorrowedObject(opts)));
 
     } finally {
         heap[stack_pointer++] = undefined;
@@ -56,9 +56,9 @@ export function find_path_js(grid, start, end, opts) {
 * @param {any} opts
 * @returns {any}
 */
-export function find_walkable_js(grid, source, opts) {
+export function findWalkable(grid, source, opts) {
     try {
-        return takeObject(wasm.find_walkable_js(addBorrowedObject(grid), addBorrowedObject(source), addBorrowedObject(opts)));
+        return takeObject(wasm.findWalkable(addBorrowedObject(grid), addBorrowedObject(source), addBorrowedObject(opts)));
 
     } finally {
         heap[stack_pointer++] = undefined;
@@ -73,9 +73,9 @@ export function find_walkable_js(grid, source, opts) {
 * @param {any} coords
 * @returns {any}
 */
-export function to_coord_map_js(coords) {
+export function toCoordMap(coords) {
     try {
-        return takeObject(wasm.to_coord_map_js(addBorrowedObject(coords)));
+        return takeObject(wasm.toCoordMap(addBorrowedObject(coords)));
 
     } finally {
         heap[stack_pointer++] = undefined;

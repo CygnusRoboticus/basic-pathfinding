@@ -12,7 +12,7 @@ extern "C" {
   fn log(s: &JsValue);
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(js_name = "findPath")]
 pub fn find_path_js(grid: &JsValue, start: &JsValue, end: &JsValue, opts: &JsValue) -> JsValue {
   let grid: Grid = grid.into_serde().unwrap();
   let start: Coord = start.into_serde().unwrap();
@@ -50,7 +50,7 @@ pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: Option<SearchOpts>
   }
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(js_name = "findWalkable")]
 pub fn find_walkable_js(grid: &JsValue, source: &JsValue, opts: &JsValue) -> JsValue {
   let grid: Grid = grid.into_serde().unwrap();
   let source: Vec<Coord> = source.into_serde().unwrap();
@@ -80,7 +80,7 @@ pub fn find_walkable(grid: &Grid, source: Vec<Coord>, opts: Option<SearchOpts>) 
   coords.to_owned()
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(js_name = "toCoordMap")]
 pub fn to_coord_map_js(coords: &JsValue) -> JsValue {
   let coords: Vec<Coord> = coords.into_serde().unwrap();
   let hash = to_coord_map(coords);

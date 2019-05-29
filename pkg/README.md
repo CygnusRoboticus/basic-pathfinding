@@ -1,29 +1,35 @@
-# 🦀🕸️ `wasm-pack-template`
+# 🗺️ `rust-pathfinding`
 
-A template for kick starting a Rust and WebAssembly project using
-[`wasm-pack`](https://github.com/rustwasm/wasm-pack).
+Pathfinding is a simple package for performing 2D [A-star](https://en.wikipedia.org/wiki/A*_search_algorithm) pathfinding in square- and hex-based tile grids.
 
-[**📚 Read this template tutorial! 📚**][template-docs]
+## Basic Usage
 
-This template is designed for compiling Rust libraries into WebAssembly and
-publishing the resulting package to NPM.
+```typescript
+import { find_path_js } from 'pathfinding';
 
-Be sure to check out [other `wasm-pack` tutorials online][tutorials] for other
-templates and usages of `wasm-pack`.
+const grid: Grid = {
+  tiles: [
+    [1, 1, 0, 1, 1],
+    [1, 1, 0, 1, 1],
+    [1, 1, 0, 1, 1],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1]
+  ],
+  walkable_tiles: [1]
+};
 
-[tutorials]: https://rustwasm.github.io/docs/wasm-pack/tutorials/index.html
-[template-docs]: https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/index.html
+const path = await find_path_js(grid, 1, 2, 3, 2);
+// [
+//   { x: 1, y: 2 },
+//   { x: 1, y: 3 },
+//   { x: 2, y: 3 },
+//   { x: 3, y: 3 },
+//   { x: 3, y: 2 }
+// ]
+```
+
 
 ## 🚴 Usage
-
-### 🐑 Use `cargo generate` to Clone this Template
-
-[Learn more about `cargo generate` here.](https://github.com/ashleygwilliams/cargo-generate)
-
-```
-cargo generate --git https://github.com/rustwasm/wasm-pack-template.git --name my-project
-cd my-project
-```
 
 ### 🛠️ Build with `wasm-pack build`
 
@@ -36,18 +42,3 @@ wasm-pack build
 ```
 wasm-pack test --headless --firefox
 ```
-
-### 🎁 Publish to NPM with `wasm-pack publish`
-
-```
-wasm-pack publish
-```
-
-## 🔋 Batteries Included
-
-* [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
-  between WebAssembly and JavaScript.
-* [`console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook)
-  for logging panic messages to the developer console.
-* [`wee_alloc`](https://github.com/rustwasm/wee_alloc), an allocator optimized
-  for small code size.
