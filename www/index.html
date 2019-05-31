@@ -3,8 +3,32 @@
   <head>
     <meta charset="utf-8">
     <title>Hello wasm-pack!</title>
+    <style>
+      .flex {
+        display: flex;
+      }
+
+      button {
+        height: 2rem;
+        width: 2rem;
+      }
+
+      button.start {
+        background-color: blue !important;
+      }
+
+      button.walkable {
+        border-color: grey;
+      }
+
+      button.active {
+        background-color: grey;
+      }
+    </style>
   </head>
   <body>
+    <div id="container"></div>
+
     <script src="./bootstrap.js"></script>
   </body>
 </html>
