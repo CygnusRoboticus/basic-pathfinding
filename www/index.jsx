@@ -20,7 +20,7 @@ class PathingExample extends React.Component {
     extra_costs: {},
     unstoppable_coords: {},
     unwalkable_coords: {},
-    grid_type: "Cardinal",//GridType.Cardinal,
+    grid_type: GridType.Cardinal,
   };
 
   get path() {

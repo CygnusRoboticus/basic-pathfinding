@@ -1,7 +1,5 @@
-use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 
-#[wasm_bindgen]
 #[derive(Copy, Clone, Serialize, Deserialize, Debug)]
 pub enum GridType {
   Cardinal,
@@ -9,8 +7,8 @@ pub enum GridType {
   Intercardinal
 }
 
-#[wasm_bindgen]
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct Grid {
   tiles: Vec<Vec<i32>>,
   walkable_tiles: Vec<i32>,

@@ -1,5 +1,3 @@
-use wasm_bindgen::prelude::*;
-
 use std::collections::BinaryHeap;
 use std::collections::HashMap;
 
@@ -8,8 +6,8 @@ use crate::node::Node;
 use crate::grid::Grid;
 
 
-#[wasm_bindgen]
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,
   pub end_on_unstoppable: Option<bool>,

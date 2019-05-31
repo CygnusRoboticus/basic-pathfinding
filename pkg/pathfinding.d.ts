@@ -22,26 +22,30 @@ export function toCoordMap(coords: any): any;
 /**
 */
 export enum GridType {
-  Cardinal,
-  Hex,
-  Intercardinal,
+  Cardinal = "Cardinal",
+  Hex = "Hex",
+  Intercardinal = "Intercardinal",
 }
 /**
 */
-export class Coord {
-  free(): void;
+export interface Coord {
   x: number;
   y: number;
 }
 /**
 */
-export class Grid {
-  free(): void;
+export interface Grid {
+    tiles: number[][];
+    walkable_tiles: number[];
+    costs: { [tile: number]: number | undefined };
+    extra_costs: { [y: number]: { [x: number]: number | undefined } | undefined };
+    unstoppable_coords: { [y: number]: { [x: number]: number | undefined } | undefined };
+    unwalkable_coords: { [y: number]: { [x: number]: number | undefined } | undefined };
+    grid_type: GridType;
 }
 /**
 */
-export class SearchOpts {
-  free(): void;
-  cost_threshold: number;
-  end_on_unstoppable: boolean;
+export interface SearchOpts {
+  cost_threshold?: number;
+  end_on_unstoppable?: boolean;
 }

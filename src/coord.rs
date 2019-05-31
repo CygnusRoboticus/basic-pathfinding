@@ -1,7 +1,5 @@
-use wasm_bindgen::prelude::*;
 use std::cmp::Ordering;
 
-#[wasm_bindgen]
 #[derive(Eq, Clone, Copy, Serialize, Deserialize, Debug)]
 pub struct Coord {
     pub x: i32,

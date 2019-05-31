@@ -33,7 +33,9 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "pathfinding": "file:../pkg"
+    "pathfinding": "file:../pkg",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "babel-loader": "^8.0.6",
