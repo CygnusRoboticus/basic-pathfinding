@@ -1,8 +1,11 @@
 [package]
-name = "pathfinding"
+name = "basic-pathfinding"
+description = "Tile-based A* pathfinding in Rust/WebAssembly"
 version = "0.1.0"
 authors = ["CygnusRoboticus <joshuadaleharris@gmail.com>"]
 edition = "2018"
+repository = "https://github.com/CygnusRoboticus/basic-pathfinding"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

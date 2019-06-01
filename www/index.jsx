@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { findPath, findWalkable, toCoordMap, GridType } from "pathfinding";
+import { findPath, findWalkable } from "basic-pathfinding";
 
 function random(max) {
   return Math.floor(Math.random() * Math.floor(max)) + 1;
@@ -20,7 +20,7 @@ class PathingExample extends React.Component {
     extra_costs: {},
     unstoppable_coords: {},
     unwalkable_coords: {},
-    grid_type: GridType.Cardinal,
+    grid_type: 'Cardinal',
   };
 
   get path() {

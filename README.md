@@ -1,8 +1,8 @@
-# 🗺️ `rust-pathfinding`
+# 🗺️ `basic-pathfinding`
 
 Pathfinding is a simple package for performing 2D [A-star](https://en.wikipedia.org/wiki/A*_search_algorithm) pathfinding in square- and hex-based tile grids.
 
-## Basic Usage
+## Java/TypeScript Usage
 
 ```typescript
 const { findPath } = await import('pathfinding');
@@ -29,16 +29,17 @@ const path = findPath(grid, { x: 1, y: 2 }, { x: 3, y: 2 });
 ```
 
 
-## 🚴 Usage
+## 🚴 Rust Usage
 
-### 🛠️ Build with `wasm-pack build`
+### 🛠️ Building
 
 ```
 wasm-pack build
 ```
 
-### 🔬 Test in Headless Browsers with `wasm-pack test`
+### 🔬 Testing
 
 ```
+cargo test
 wasm-pack test --headless --firefox
 ```

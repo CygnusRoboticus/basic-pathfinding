@@ -1,7 +1,7 @@
-extern crate pathfinding;
-use pathfinding::grid::{Grid, GridType};
-use pathfinding::coord::Coord;
-use pathfinding::pathfinding::{find_walkable, SearchOpts};
+extern crate basic_pathfinding;
+use basic_pathfinding::grid::{Grid, GridType};
+use basic_pathfinding::coord::Coord;
+use basic_pathfinding::pathfinding::{find_walkable, SearchOpts};
 
 macro_rules! hashmap {
   ($( $key: expr => $val: expr ),*) => {{

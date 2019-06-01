@@ -1,4 +1,4 @@
-import * as wasm from './pathfinding_bg';
+import * as wasm from './basic_pathfinding_bg';
 
 const heap = new Array(32);
 

@@ -1,6 +1,6 @@
-extern crate pathfinding;
-use pathfinding::pathfinding::to_coord_map;
-use pathfinding::coord::Coord;
+extern crate basic_pathfinding;
+use basic_pathfinding::pathfinding::to_coord_map;
+use basic_pathfinding::coord::Coord;
 
 macro_rules! hashmap {
   ($( $key: expr => $val: expr ),*) => {{

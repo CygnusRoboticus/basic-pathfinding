@@ -1,27 +1,10 @@
 /* tslint:disable */
-/**
-* @param {any} grid 
-* @param {any} start 
-* @param {any} end 
-* @param {any} opts 
-* @returns {any} 
-*/
-export function findPath(grid: any, start: any, end: any, opts: any): any;
-/**
-* @param {any} grid 
-* @param {any} source 
-* @param {any} opts 
-* @returns {any} 
-*/
+export function findPath(grid: Grid, start: Coord, end: Coord, opts: SearchOpts): Coord[];
 export function findWalkable(grid: any, source: any, opts: any): any;
-/**
-* @param {any} coords 
-* @returns {any} 
-*/
 export function toCoordMap(coords: any): any;
 /**
 */
-export type GridType = "Cardinal" | "Hex" | "Intercardinal";
+export type GridType = 'Cardinal' | 'Hex' | 'Intercardinal';
 /**
 */
 export interface Coord {

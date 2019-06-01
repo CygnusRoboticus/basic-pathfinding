@@ -1,15 +1,22 @@
 {
-  "name": "pathfinding",
+  "name": "basic-pathfinding",
   "collaborators": [
     "CygnusRoboticus <joshuadaleharris@gmail.com>"
   ],
+  "description": "Tile-based A* pathfinding in Rust/WebAssembly",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CygnusRoboticus/basic-pathfinding"
+  },
   "files": [
-    "pathfinding_bg.wasm",
-    "pathfinding.js",
-    "pathfinding.d.ts"
+    "basic_pathfinding_bg.wasm",
+    "basic_pathfinding.js",
+    "basic_pathfinding.d.ts",
+    "LICENSE_MIT"
   ],
-  "module": "pathfinding.js",
-  "types": "pathfinding.d.ts",
+  "module": "basic_pathfinding.js",
+  "types": "basic_pathfinding.d.ts",
   "sideEffects": "false"
 }
