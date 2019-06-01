@@ -21,11 +21,7 @@ export function findWalkable(grid: any, source: any, opts: any): any;
 export function toCoordMap(coords: any): any;
 /**
 */
-export enum GridType {
-  Cardinal = "Cardinal",
-  Hex = "Hex",
-  Intercardinal = "Intercardinal",
-}
+export type GridType = "Cardinal" | "Hex" | "Intercardinal";
 /**
 */
 export interface Coord {

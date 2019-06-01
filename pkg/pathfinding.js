@@ -84,10 +84,6 @@ export function toCoordMap(coords) {
 
 }
 
-/**
-*/
-export const GridType = Object.freeze({ Cardinal: "Cardinal",Hex: "Hex", Intercardinal: "Intercardinal" });
-
 let cachedTextDecoder = new TextDecoder('utf-8');
 
 let cachegetUint8Memory = null;
