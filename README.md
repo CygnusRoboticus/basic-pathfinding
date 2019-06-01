@@ -15,7 +15,7 @@ const grid: Grid = {
     [1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1]
   ],
-  walkable_tiles: [1]
+  walkableTiles: [1]
 };
 
 const path = findPath(grid, { x: 1, y: 2 }, { x: 3, y: 2 });

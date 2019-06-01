@@ -1,6 +1,7 @@
 use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 
+use crate::utils::set_panic_hook;
 use crate::coord::Coord;
 use crate::grid::Grid;
 use crate::search::Search;
@@ -14,6 +15,8 @@ extern "C" {
 
 #[wasm_bindgen(js_name = "findPath")]
 pub fn find_path_js(grid: &JsValue, start: &JsValue, end: &JsValue, opts: &JsValue) -> JsValue {
+  set_panic_hook();
+
   let grid: Grid = grid.into_serde().unwrap();
   let start: Coord = start.into_serde().unwrap();
   let end: Coord = end.into_serde().unwrap();
@@ -52,6 +55,8 @@ pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: Option<SearchOpts>
 
 #[wasm_bindgen(js_name = "findWalkable")]
 pub fn find_walkable_js(grid: &JsValue, source: &JsValue, opts: &JsValue) -> JsValue {
+  set_panic_hook();
+
   let grid: Grid = grid.into_serde().unwrap();
   let source: Vec<Coord> = source.into_serde().unwrap();
   let opts: Option<SearchOpts> = Some(opts.into_serde().unwrap());
@@ -82,6 +87,8 @@ pub fn find_walkable(grid: &Grid, source: Vec<Coord>, opts: Option<SearchOpts>) 
 
 #[wasm_bindgen(js_name = "toCoordMap")]
 pub fn to_coord_map_js(coords: &JsValue) -> JsValue {
+  set_panic_hook();
+
   let coords: Vec<Coord> = coords.into_serde().unwrap();
   let hash = to_coord_map(coords);
   JsValue::from_serde(&hash).unwrap()

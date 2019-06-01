@@ -98,6 +98,15 @@ function getStringFromWasm(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
 }
 
+export function __wbg_error_4bb6c2a97407129a(arg0, arg1) {
+    let varg0 = getStringFromWasm(arg0, arg1);
+
+    varg0 = varg0.slice();
+    wasm.__wbindgen_free(arg0, arg1 * 1);
+
+    console.error(varg0);
+}
+
 function addHeapObject(obj) {
     if (heap_next === heap.length) heap.push(heap.length + 1);
     const idx = heap_next;
@@ -107,7 +116,9 @@ function addHeapObject(obj) {
     return idx;
 }
 
-export function __wbindgen_json_parse(ptr, len) { return addHeapObject(JSON.parse(getStringFromWasm(ptr, len))); }
+export function __wbg_new_59cb74e423758ede() {
+    return addHeapObject(new Error());
+}
 
 let WASM_VECTOR_LEN = 0;
 
@@ -176,9 +187,23 @@ function getUint32Memory() {
     return cachegetUint32Memory;
 }
 
+export function __wbg_stack_558ba5917b466edd(ret, arg0) {
+
+    const retptr = passStringToWasm(getObject(arg0).stack);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
+}
+
+export function __wbindgen_json_parse(ptr, len) { return addHeapObject(JSON.parse(getStringFromWasm(ptr, len))); }
+
 export function __wbindgen_json_serialize(idx, ptrptr) {
     const ptr = passStringToWasm(JSON.stringify(getObject(idx)));
     getUint32Memory()[ptrptr / 4] = ptr;
     return WASM_VECTOR_LEN;
 }
+
+export function __wbindgen_object_drop_ref(i) { dropObject(i); }
 

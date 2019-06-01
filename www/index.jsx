@@ -11,16 +11,16 @@ class PathingExample extends React.Component {
     tiles: Array.from({ length: 20 }).map(
       () => Array.from({ length: 20 }).map(() => random(5))
     ),
-    walkable_tiles: [1, 2, 3, 4],
+    walkableTiles: [1, 2, 3, 4],
     costs: {
       2: 2,
       3: 3,
       4: 4
     },
-    extra_costs: {},
-    unstoppable_coords: {},
-    unwalkable_coords: {},
-    grid_type: 'Cardinal',
+    extraCosts: {},
+    unstoppableCoords: {},
+    unwalkableCoords: {},
+    gridType: 'Cardinal',
   };
 
   get path() {
@@ -33,7 +33,7 @@ class PathingExample extends React.Component {
 
   get opts() {
     return {
-      cost_threshold: this.state.movement
+      costThreshold: this.state.movement
     }
   }
 
