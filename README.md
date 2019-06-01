@@ -5,7 +5,7 @@ Pathfinding is a simple package for performing 2D [A-star](https://en.wikipedia.
 ## Basic Usage
 
 ```typescript
-import { find_path_js } from 'pathfinding';
+const { findPath } = await import('pathfinding');
 
 const grid: Grid = {
   tiles: [
@@ -18,7 +18,7 @@ const grid: Grid = {
   walkable_tiles: [1]
 };
 
-const path = await find_path_js(grid, 1, 2, 3, 2);
+const path = findPath(grid, { x: 1, y: 2 }, { x: 3, y: 2 });
 // [
 //   { x: 1, y: 2 },
 //   { x: 1, y: 3 },
