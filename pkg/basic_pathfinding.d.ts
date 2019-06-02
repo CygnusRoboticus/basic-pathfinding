@@ -15,16 +15,16 @@ export interface Coord {
 */
 export interface Grid {
     tiles: number[][];
-    walkable_tiles: number[];
+    walkableTiles: number[];
     costs: { [tile: number]: number | undefined };
-    extra_costs: { [y: number]: { [x: number]: number | undefined } | undefined };
-    unstoppable_coords: { [y: number]: { [x: number]: number | undefined } | undefined };
-    unwalkable_coords: { [y: number]: { [x: number]: number | undefined } | undefined };
-    grid_type: GridType;
+    extraCosts: { [y: number]: { [x: number]: number | undefined } | undefined };
+    unstoppableCoords: { [y: number]: { [x: number]: number | undefined } | undefined };
+    unwalkableCoords: { [y: number]: { [x: number]: number | undefined } | undefined };
+    gridType: GridType;
 }
 /**
 */
 export interface SearchOpts {
-  cost_threshold?: number;
-  end_on_unstoppable?: boolean;
+  costThreshold?: number;
+  endOnUnstoppable?: boolean;
 }
