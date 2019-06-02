@@ -5,8 +5,8 @@ use crate::coord::Coord;
 use crate::node::Node;
 use crate::grid::Grid;
 
-#[derive(Deserialize, NifStruct)]
-#[module = "SearchOpts"]
+#[derive(Deserialize/*, NifStruct*/)]
+// #[module = "SearchOpts"]
 #[serde(rename_all = "camelCase")]
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,

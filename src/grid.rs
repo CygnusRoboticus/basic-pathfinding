@@ -12,11 +12,20 @@ pub enum GridType {
 pub struct Grid {
   tiles: Vec<Vec<i32>>,
   walkable_tiles: Vec<i32>,
+  #[serde(default = "HashMap::new")]
   costs: HashMap<i32, i32>,
+  #[serde(default = "HashMap::new")]
   extra_costs: HashMap<i32, HashMap<i32, i32>>,
+  #[serde(default = "HashMap::new")]
   unstoppable_coords: HashMap<i32, HashMap<i32, bool>>,
+  #[serde(default = "HashMap::new")]
   unwalkable_coords: HashMap<i32, HashMap<i32, bool>>,
+  #[serde(default = "default_grid_type")]
   grid_type: GridType,
+}
+
+fn default_grid_type() -> GridType {
+  GridType::Cardinal
 }
 
 impl Grid {

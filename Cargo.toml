@@ -1,7 +1,7 @@
 [package]
 name = "basic-pathfinding"
 description = "Tile-based A* pathfinding in Rust/WebAssembly"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["CygnusRoboticus <joshuadaleharris@gmail.com>"]
 edition = "2018"
 repository = "https://github.com/CygnusRoboticus/basic-pathfinding"
@@ -15,9 +15,9 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 # rustler for elixir NIF
-rustler = "0.20.0"
-rustler_codegen = "0.20.0"
-lazy_static = "1.0"
+# rustler = "0.20.0"
+# rustler_codegen = "0.20.0"
+# lazy_static = "1.0"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires

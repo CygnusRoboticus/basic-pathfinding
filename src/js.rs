@@ -13,6 +13,7 @@ extern "C" {
 }
 
 #[wasm_bindgen(js_name = "findPath")]
+#[allow(dead_code)]
 pub fn find_path_js(grid: &JsValue, start: &JsValue, end: &JsValue, opts: &JsValue) -> JsValue {
   set_panic_hook();
 
@@ -26,6 +27,7 @@ pub fn find_path_js(grid: &JsValue, start: &JsValue, end: &JsValue, opts: &JsVal
 }
 
 #[wasm_bindgen(js_name = "findWalkable")]
+#[allow(dead_code)]
 pub fn find_walkable_js(grid: &JsValue, source: &JsValue, opts: &JsValue) -> JsValue {
   set_panic_hook();
 
@@ -38,6 +40,7 @@ pub fn find_walkable_js(grid: &JsValue, source: &JsValue, opts: &JsValue) -> JsV
 }
 
 #[wasm_bindgen(js_name = "toCoordMap")]
+#[allow(dead_code)]
 pub fn to_coord_map_js(coords: &JsValue) -> JsValue {
   set_panic_hook();
 

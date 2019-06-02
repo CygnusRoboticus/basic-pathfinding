@@ -17,9 +17,6 @@ class PathingExample extends React.Component {
       3: 3,
       4: 4
     },
-    extraCosts: {},
-    unstoppableCoords: {},
-    unwalkableCoords: {},
     gridType: 'Cardinal',
   };
 
