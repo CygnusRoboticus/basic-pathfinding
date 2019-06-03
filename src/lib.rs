@@ -5,7 +5,6 @@ pub mod grid;
 pub mod coord;
 pub mod pathfinding;
 
-
 #[macro_use] extern crate serde_derive;
 extern crate log;
 extern crate env_logger;
