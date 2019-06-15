@@ -7,7 +7,11 @@ pub enum GridType {
   Intercardinal
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+impl Default for GridType {
+  fn default() -> GridType { GridType::Cardinal }
+}
+
+#[derive(Default, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Grid {
   tiles: Vec<Vec<i32>>,

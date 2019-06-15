@@ -4,7 +4,7 @@
     "CygnusRoboticus <joshuadaleharris@gmail.com>"
   ],
   "description": "Tile-based A* pathfinding in Rust/WebAssembly",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "repository": {
     "type": "git",

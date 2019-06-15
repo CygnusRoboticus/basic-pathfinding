@@ -5,7 +5,7 @@ use crate::coord::Coord;
 use crate::node::Node;
 use crate::grid::Grid;
 
-#[derive(Deserialize/*, NifStruct*/)]
+#[derive(Default, Deserialize/*, NifStruct*/)]
 // #[module = "SearchOpts"]
 #[serde(rename_all = "camelCase")]
 pub struct SearchOpts {
