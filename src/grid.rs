@@ -4,28 +4,30 @@ use std::collections::HashMap;
 pub enum GridType {
   Cardinal,
   Hex,
-  Intercardinal
+  Intercardinal,
 }
 
 impl Default for GridType {
-  fn default() -> GridType { GridType::Cardinal }
+  fn default() -> GridType {
+    GridType::Cardinal
+  }
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Grid {
-  tiles: Vec<Vec<i32>>,
-  walkable_tiles: Vec<i32>,
+  pub tiles: Vec<Vec<i32>>,
+  pub walkable_tiles: Vec<i32>,
   #[serde(default = "HashMap::new")]
-  costs: HashMap<i32, i32>,
+  pub costs: HashMap<i32, i32>,
   #[serde(default = "HashMap::new")]
-  extra_costs: HashMap<i32, HashMap<i32, i32>>,
+  pub extra_costs: HashMap<i32, HashMap<i32, i32>>,
   #[serde(default = "HashMap::new")]
-  unstoppable_coords: HashMap<i32, HashMap<i32, bool>>,
+  pub unstoppable_coords: HashMap<i32, HashMap<i32, bool>>,
   #[serde(default = "HashMap::new")]
-  unwalkable_coords: HashMap<i32, HashMap<i32, bool>>,
+  pub unwalkable_coords: HashMap<i32, HashMap<i32, bool>>,
   #[serde(default = "default_grid_type")]
-  grid_type: GridType,
+  pub grid_type: GridType,
 }
 
 fn default_grid_type() -> GridType {
@@ -49,7 +51,7 @@ impl Grid {
       extra_costs: extra_costs,
       unstoppable_coords: unstoppable_coords,
       unwalkable_coords: unwalkable_coords,
-      grid_type: grid_type
+      grid_type: grid_type,
     }
   }
 
@@ -108,7 +110,7 @@ impl Grid {
           None => &1,
           Some(cost) => cost,
         }
-      },
+      }
     }
   }
 
@@ -122,11 +124,10 @@ impl Grid {
 
 fn get_nested_bool(map: &HashMap<i32, HashMap<i32, bool>>, x: &i32, y: &i32) -> bool {
   match map.get(y) {
-    Some(nested) =>
-      match nested.get(x) {
-        Some(_) => true,
-        _ => false,
-      },
-    _ => false
+    Some(nested) => match nested.get(x) {
+      Some(_) => true,
+      _ => false,
+    },
+    _ => false,
   }
 }
