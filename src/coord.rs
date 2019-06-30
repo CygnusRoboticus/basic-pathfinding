@@ -1,10 +1,10 @@
 use std::cmp::Ordering;
 
 // #[module = "Coord"]
-#[derive(Default, Eq, Clone, Copy, Serialize, Deserialize, Debug/*, NifStruct*/)]
+#[derive(Default, Eq, Clone, Copy, Serialize, Deserialize, Debug)]
 pub struct Coord {
-    pub x: i32,
-    pub y: i32,
+  pub x: i32,
+  pub y: i32,
 }
 
 impl Coord {
@@ -14,13 +14,19 @@ impl Coord {
 
   pub fn equals(a: Option<Coord>, b: Option<Coord>) -> bool {
     match (a, b) {
-      (Some(Coord{x: x1, y: y1}), Some(Coord{x: x2, y: y2})) if (x1 == x2) & (y1 == y2) => true,
+      (Some(Coord { x: x1, y: y1 }), Some(Coord { x: x2, y: y2 })) if (x1 == x2) & (y1 == y2) => {
+        true
+      }
       _ => false,
     }
   }
 
   pub fn matches(&self, x: i32, y: i32) -> bool {
     self.x == x && self.y == y
+  }
+
+  pub fn distance(&self, other: &Self) -> i32 {
+    (self.x - other.x).abs() + (self.y - other.y).abs()
   }
 
   pub fn to_flat_repr(coords: Vec<Coord>) -> Vec<i32> {
