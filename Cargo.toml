@@ -26,10 +26,6 @@ serde_derive = "^1.0.59"
 log = "0.4.6"
 env_logger = "0.6.1"
 
-[dependencies.wasm-bindgen]
-version = "^0.2"
-features = ["serde-serialize"]
-
 [profile.release]
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
