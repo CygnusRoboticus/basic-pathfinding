@@ -2,44 +2,43 @@
 
 Pathfinding is a simple package for performing 2D [A-star](https://en.wikipedia.org/wiki/A*_search_algorithm) pathfinding in square- and hex-based tile grids.
 
-## Java/TypeScript Usage
-
-```typescript
-const { findPath } = await import('pathfinding');
-
-const grid: Grid = {
-  tiles: [
-    [1, 1, 0, 1, 1],
-    [1, 1, 0, 1, 1],
-    [1, 1, 0, 1, 1],
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1]
-  ],
-  walkableTiles: [1]
-};
-
-const path = findPath(grid, { x: 1, y: 2 }, { x: 3, y: 2 });
-// [
-//   { x: 1, y: 2 },
-//   { x: 1, y: 3 },
-//   { x: 2, y: 3 },
-//   { x: 3, y: 3 },
-//   { x: 3, y: 2 }
-// ]
-```
-
-
 ## 🚴 Rust Usage
+
+```rust
+let grid = Grid {
+  tiles:
+    vec![
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1]
+    ],
+  walkable_tiles: vec![1],
+  grid_type: GridType::Cardinal,
+  ..Default::default()
+);
+let start = Coord::new(1, 2);
+let end = Coord::new(3, 2);
+let path = find_path(&grid, start, end, None);
+
+path == Some(vec![
+  Coord { x: 1, y: 2 },
+  Coord { x: 1, y: 3 },
+  Coord { x: 2, y: 3 },
+  Coord { x: 3, y: 3 },
+  Coord { x: 3, y: 2 },
+]);
+```
 
 ### 🛠️ Building
 
 ```
-wasm-pack build
+cargo build
 ```
 
 ### 🔬 Testing
 
 ```
 cargo test
-wasm-pack test --headless --firefox
 ```
