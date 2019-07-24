@@ -35,26 +35,6 @@ fn default_grid_type() -> GridType {
 }
 
 impl Grid {
-  pub fn new(
-    tiles: Vec<Vec<i32>>,
-    walkable_tiles: Vec<i32>,
-    costs: HashMap<i32, i32>,
-    extra_costs: HashMap<i32, HashMap<i32, i32>>,
-    unstoppable_coords: HashMap<i32, HashMap<i32, bool>>,
-    unwalkable_coords: HashMap<i32, HashMap<i32, bool>>,
-    grid_type: GridType,
-  ) -> Grid {
-    Grid {
-      tiles: tiles,
-      walkable_tiles: walkable_tiles,
-      costs: costs,
-      extra_costs: extra_costs,
-      unstoppable_coords: unstoppable_coords,
-      unwalkable_coords: unwalkable_coords,
-      grid_type: grid_type,
-    }
-  }
-
   pub fn is_cardinal(&self) -> bool {
     match self.grid_type {
       GridType::Cardinal => true,

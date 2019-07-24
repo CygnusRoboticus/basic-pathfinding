@@ -1,16 +1,27 @@
-use std::collections::HashMap;
 use crate::coord::Coord;
 use crate::grid::Grid;
 use crate::search::Search;
 pub use crate::search::SearchOpts;
+use std::collections::HashMap;
 
-pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: Option<SearchOpts>) -> Option<Vec<Coord>> {
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct ReachableResult {
+  pub stoppable: Vec<Coord>,
+  pub walkable: Vec<Coord>,
+}
+
+pub fn find_path(
+  grid: &Grid,
+  start: Coord,
+  end: Coord,
+  opts: Option<SearchOpts>,
+) -> Option<Vec<Coord>> {
   let end_on_unstoppable = match &opts {
     None => false,
     Some(opts) => match opts.end_on_unstoppable {
       None => false,
       Some(end_on_unstoppable) => end_on_unstoppable,
-    }
+    },
   };
 
   if Coord::equals(Some(start), Some(end)) {
@@ -31,7 +42,11 @@ pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: Option<SearchOpts>
   }
 }
 
-pub fn find_walkable(grid: &Grid, source: Vec<Coord>, opts: Option<SearchOpts>) -> Vec<Coord> {
+pub fn find_reachable(
+  grid: &Grid,
+  source: Vec<Coord>,
+  opts: Option<SearchOpts>,
+) -> ReachableResult {
   let mut search = Search::new(*source.first().unwrap(), None, opts);
 
   for coord in source {
@@ -41,28 +56,36 @@ pub fn find_walkable(grid: &Grid, source: Vec<Coord>, opts: Option<SearchOpts>) 
 
   calculate(&mut search, &grid);
 
-  let coords = &mut vec![];
+  let mut stoppable = vec![];
+  let mut walkable = vec![];
   for node in search.traversed_nodes() {
-    if grid.is_coord_walkable(&node.x, &node.y) {
-      coords.push(Coord::new(node.x, node.y));
+    if grid.is_coord_stoppable(&node.x, &node.y) {
+      stoppable.push(Coord::new(node.x, node.y));
+    } else if grid.is_coord_walkable(&node.x, &node.y) {
+      walkable.push(Coord::new(node.x, node.y));
     }
   }
-  coords.sort();
-  coords.to_owned()
+  stoppable.sort();
+  walkable.sort();
+
+  ReachableResult {
+    stoppable: stoppable,
+    walkable: walkable,
+  }
 }
 
 pub fn to_coord_map(coords: Vec<Coord>) -> HashMap<i32, HashMap<i32, bool>> {
   let hash = &mut HashMap::new();
-  for Coord{x, y} in coords {
+  for Coord { x, y } in coords {
     match hash.get_mut(&y) {
       None => {
         let mut inner_hash = HashMap::new();
         inner_hash.insert(x, true);
         hash.insert(y, inner_hash);
-      },
+      }
       Some(inner_hash) => {
         inner_hash.insert(x, true);
-      },
+      }
     };
   }
   hash.to_owned()
@@ -114,6 +137,6 @@ fn calculate(search: &mut Search, grid: &Grid) {
 
         calculate(search, grid)
       }
-    },
+    }
   }
 }
