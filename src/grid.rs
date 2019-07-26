@@ -64,7 +64,7 @@ impl Grid {
     }
   }
 
-  pub fn is_coord_stoppable(&self, x: &i32, y: &i32) -> bool {
+  pub fn is_coord_stoppable(&self, x: i32, y: i32) -> bool {
     if get_nested_bool(&self.unstoppable_coords, x, y) {
       false
     } else {
@@ -72,39 +72,39 @@ impl Grid {
     }
   }
 
-  pub fn is_coord_walkable(&self, x: &i32, y: &i32) -> bool {
+  pub fn is_coord_walkable(&self, x: i32, y: i32) -> bool {
     if get_nested_bool(&self.unwalkable_coords, x, y) {
       false
     } else {
-      let tile = self.tiles[*y as usize][*x as usize];
+      let tile = self.tiles[y as usize][x as usize];
       self.walkable_tiles.contains(&tile)
     }
   }
 
-  pub fn get_coord_cost(&self, x: &i32, y: &i32) -> &i32 {
+  pub fn get_coord_cost(&self, x: i32, y: i32) -> i32 {
     match self.get_extra_cost(x, y) {
       Some(extra) => extra,
       _ => {
-        let tile = self.tiles[*y as usize][*x as usize];
+        let tile = self.tiles[y as usize][x as usize];
         match self.costs.get(&tile) {
-          None => &1,
-          Some(cost) => cost,
+          None => 1,
+          Some(cost) => *cost,
         }
       }
     }
   }
 
-  fn get_extra_cost(&self, x: &i32, y: &i32) -> Option<&i32> {
+  fn get_extra_cost(&self, x: i32, y: i32) -> Option<i32> {
     match self.extra_costs.get(&y) {
-      Some(inner_hash) => inner_hash.get(&x),
+      Some(inner_hash) => inner_hash.get(&x).cloned(),
       _ => None,
     }
   }
 }
 
-fn get_nested_bool(map: &HashMap<i32, HashMap<i32, bool>>, x: &i32, y: &i32) -> bool {
-  match map.get(y) {
-    Some(nested) => match nested.get(x) {
+fn get_nested_bool(map: &HashMap<i32, HashMap<i32, bool>>, x: i32, y: i32) -> bool {
+  match map.get(&y) {
+    Some(nested) => match nested.get(&x) {
       Some(_) => true,
       _ => false,
     },

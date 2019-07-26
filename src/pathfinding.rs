@@ -18,19 +18,16 @@ pub fn find_path(
 ) -> Option<Vec<Coord>> {
   let end_on_unstoppable = match &opts {
     None => false,
-    Some(opts) => match opts.end_on_unstoppable {
-      None => false,
-      Some(end_on_unstoppable) => end_on_unstoppable,
-    },
+    Some(opts) => opts.end_on_unstoppable,
   };
 
   if Coord::equals(Some(start), Some(end)) {
     Some(vec![])
-  } else if !grid.is_coord_stoppable(&end.x, &end.y) & !end_on_unstoppable {
+  } else if !grid.is_coord_stoppable(end.x, end.y) & !end_on_unstoppable {
     None
   } else {
     let mut search = Search::new(start, Some(end), opts);
-    let start_node = search.coordinate_to_node(None, &start.x, &start.y, &0);
+    let start_node = search.coordinate_to_node(None, start.x, start.y, 0);
     search.push(start_node);
 
     calculate(&mut search, &grid);
@@ -50,7 +47,7 @@ pub fn find_reachable(
   let mut search = Search::new(*source.first().unwrap(), None, opts);
 
   for coord in source {
-    let node = search.coordinate_to_node(None, &coord.x, &coord.y, &0);
+    let node = search.coordinate_to_node(None, coord.x, coord.y, 0);
     search.push(node);
   }
 
@@ -59,9 +56,9 @@ pub fn find_reachable(
   let mut stoppable = vec![];
   let mut walkable = vec![];
   for node in search.traversed_nodes() {
-    if grid.is_coord_stoppable(&node.x, &node.y) {
+    if grid.is_coord_stoppable(node.x, node.y) {
       stoppable.push(Coord::new(node.x, node.y));
-    } else if grid.is_coord_walkable(&node.x, &node.y) {
+    } else if grid.is_coord_walkable(node.x, node.y) {
       walkable.push(Coord::new(node.x, node.y));
     }
   }

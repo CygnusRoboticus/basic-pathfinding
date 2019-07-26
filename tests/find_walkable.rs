@@ -167,7 +167,7 @@ fn cancels_early_with_cost_threshold() {
   let source = vec![Coord::new(1, 2)];
   let opts = SearchOpts {
     cost_threshold: Some(1),
-    end_on_unstoppable: None,
+    ..SearchOpts::default()
   };
   let result = find_reachable(&grid, source, Some(opts));
 
@@ -184,7 +184,7 @@ fn cancels_early_with_cost_threshold() {
   let source = vec![Coord::new(1, 2)];
   let opts = SearchOpts {
     cost_threshold: Some(4),
-    end_on_unstoppable: None,
+    ..SearchOpts::default()
   };
   let result = find_reachable(&grid, source, Some(opts));
 
@@ -228,7 +228,7 @@ fn reports_start_only_when_cost_zero() {
   let source = vec![Coord::new(1, 2)];
   let opts = SearchOpts {
     cost_threshold: Some(0),
-    end_on_unstoppable: None,
+    ..SearchOpts::default()
   };
   let result = find_reachable(&grid, source, Some(opts));
 
@@ -252,7 +252,7 @@ fn doesnt_include_unwalkable_start() {
   let source = vec![Coord::new(1, 2)];
   let opts = SearchOpts {
     cost_threshold: Some(4),
-    end_on_unstoppable: None,
+    ..SearchOpts::default()
   };
   let result = find_reachable(&grid, source, Some(opts));
 

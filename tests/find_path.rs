@@ -32,7 +32,6 @@ fn traverses_walkable_tiles() {
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(1, 2),
       Coord::new(1, 3),
       Coord::new(2, 3),
       Coord::new(3, 3),
@@ -65,7 +64,6 @@ fn path_avoids_unwalkable_coords() {
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(1, 2),
       Coord::new(1, 3),
       Coord::new(1, 4),
       Coord::new(2, 4),
@@ -184,15 +182,14 @@ fn accepts_opt_to_end_on_unstoppable() {
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
   let opts = SearchOpts {
-    cost_threshold: None,
-    end_on_unstoppable: Some(true),
+    end_on_unstoppable: true,
+    ..SearchOpts::default()
   };
   let path = find_path(&grid, start, end, Some(opts));
 
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(0, 2),
       Coord::new(1, 2),
       Coord::new(2, 2),
       Coord::new(3, 2),
@@ -222,7 +219,6 @@ fn prefers_straight_paths() {
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(0, 2),
       Coord::new(1, 2),
       Coord::new(2, 2),
       Coord::new(3, 2),
@@ -253,7 +249,6 @@ fn respects_costs() {
   assert_eq!(
     path.unwrap(),
     [
-      Coord::new(0, 2),
       Coord::new(0, 3),
       Coord::new(1, 3),
       Coord::new(2, 3),
@@ -289,7 +284,6 @@ fn respects_extra_costs() {
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(0, 2),
       Coord::new(0, 3),
       Coord::new(0, 4),
       Coord::new(1, 4),
@@ -319,7 +313,7 @@ fn path_cancels_early_with_cost_threshold() {
   let end = Coord::new(3, 2);
   let mut opts = SearchOpts {
     cost_threshold: Some(3),
-    end_on_unstoppable: None,
+    ..SearchOpts::default()
   };
   let path = find_path(&grid, start, end, Some(opts));
 
@@ -327,20 +321,44 @@ fn path_cancels_early_with_cost_threshold() {
 
   opts = SearchOpts {
     cost_threshold: Some(4),
-    end_on_unstoppable: None,
+    ..SearchOpts::default()
   };
   let path = find_path(&grid, start, end, Some(opts));
 
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(1, 2),
       Coord::new(1, 3),
       Coord::new(2, 3),
       Coord::new(3, 3),
       Coord::new(3, 2),
     ]
   );
+}
+
+#[test]
+fn path_finds_closest_with_cost_threshold() {
+  let grid = Grid {
+    tiles: vec![
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+    ],
+    walkable_tiles: vec![1],
+    ..Grid::default()
+  };
+  let start = Coord::new(1, 2);
+  let end = Coord::new(3, 2);
+  let opts = SearchOpts {
+    cost_threshold: Some(2),
+    path_closest: true,
+    ..SearchOpts::default()
+  };
+  let path = find_path(&grid, start, end, Some(opts));
+
+  assert_eq!(path.unwrap(), vec![Coord::new(1, 3), Coord::new(2, 3)]);
 }
 
 #[test]
@@ -365,7 +383,6 @@ fn path_navigates_hex_grids() {
   assert_eq!(
     path.unwrap(),
     vec![
-      Coord::new(1, 1),
       Coord::new(0, 2),
       Coord::new(0, 3),
       Coord::new(1, 3),
@@ -393,8 +410,5 @@ fn path_navigates_intercardinal_grids() {
   let opts = None;
   let path = find_path(&grid, start, end, opts);
 
-  assert_eq!(
-    path.unwrap(),
-    vec![Coord::new(1, 1), Coord::new(2, 2), Coord::new(3, 3),]
-  );
+  assert_eq!(path.unwrap(), vec![Coord::new(2, 2), Coord::new(3, 3),]);
 }

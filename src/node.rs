@@ -5,12 +5,12 @@ use crate::search::Search;
 
 #[derive(Eq, Clone, Copy)]
 pub struct Node {
-    pub parent: Option<Coord>,
-    pub x: i32,
-    pub y: i32,
-    pub cost: i32,
-    pub distance: i32,
-    pub visited: bool,
+  pub parent: Option<Coord>,
+  pub x: i32,
+  pub y: i32,
+  pub cost: i32,
+  pub distance: i32,
+  pub visited: bool,
 }
 
 impl Node {
@@ -33,22 +33,39 @@ impl Node {
   }
 
   pub fn format_path(&self, search: &Search) -> Vec<Coord> {
-    let path = &mut Vec::<Coord>::new();
-    path.push(Coord::new(self.x, self.y));
+    let mut nodes = vec![];
+    nodes.push(self);
 
     let mut parent = &self.parent;
-    let mut node;
     while parent.is_some() {
       match parent {
         None => (),
         Some(p) => {
-          node = search.get_node(&p.x, &p.y).unwrap();
-          path.push(Coord::new(p.x, p.y));
+          let node = search.get_node(p.x, p.y).unwrap();
           parent = &node.parent;
-        },
+          nodes.push(node);
+        }
       }
     }
-    path.reverse();
+
+    nodes.pop();
+    nodes.reverse();
+
+    let threshold = search.opts.cost_threshold;
+    let fully_path = threshold.is_some() & search.opts.path_closest;
+    let threshold = match threshold {
+      None => 0,
+      Some(t) => t,
+    };
+    let mut cost = 0;
+
+    let mut path = vec![];
+    for node in nodes.iter() {
+      if !fully_path | (fully_path & (threshold >= (cost + node.cost))) {
+        path.push(Coord::new(node.x, node.y));
+      }
+    }
+
     path.to_vec()
   }
 }

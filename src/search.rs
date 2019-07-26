@@ -2,15 +2,15 @@ use std::collections::BinaryHeap;
 use std::collections::HashMap;
 
 use crate::coord::Coord;
-use crate::node::Node;
 use crate::grid::Grid;
+use crate::node::Node;
 
-#[derive(Default, Deserialize/*, NifStruct*/)]
-// #[module = "SearchOpts"]
+#[derive(Default, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,
-  pub end_on_unstoppable: Option<bool>,
+  pub end_on_unstoppable: bool,
+  pub path_closest: bool,
 }
 
 pub struct Search {
@@ -30,10 +30,7 @@ impl Search {
       cache: HashMap::new(),
       opts: match opts {
         Some(opts) => opts,
-        None => SearchOpts {
-          cost_threshold: None,
-          end_on_unstoppable: None,
-        },
+        None => SearchOpts::default(),
       },
     }
   }
@@ -57,18 +54,18 @@ impl Search {
         let mut inner_hash = HashMap::new();
         inner_hash.insert(node.x, node);
         self.cache.insert(node.y, inner_hash);
-      },
+      }
       Some(mut inner_hash) => {
         inner_hash.insert(node.x, node);
         self.cache.insert(node.y, inner_hash);
-      },
+      }
     }
   }
 
   pub fn peek(&self) -> Option<&Node> {
     match self.heap.peek() {
       None => None,
-      Some(node) => self.get_node(&node.x, &node.y),
+      Some(node) => self.get_node(node.x, node.y),
     }
   }
 
@@ -84,10 +81,10 @@ impl Search {
     self.cache(node);
   }
 
-  pub fn get_node(&self, x: &i32, y: &i32) -> Option<&Node> {
-    match self.cache.get(y) {
+  pub fn get_node(&self, x: i32, y: i32) -> Option<&Node> {
+    match self.cache.get(&y) {
       None => None,
-      Some(inner_hash) => inner_hash.get(x),
+      Some(inner_hash) => inner_hash.get(&x),
     }
   }
 
@@ -98,7 +95,7 @@ impl Search {
     }
   }
 
-  pub fn coordinate_to_node(&self, parent: Option<&Node>, x: &i32, y: &i32, cost: &i32) -> Node {
+  pub fn coordinate_to_node(&self, parent: Option<&Node>, x: i32, y: i32, cost: i32) -> Node {
     match self.get_node(x, y) {
       Some(&node) => node,
       None => {
@@ -106,36 +103,41 @@ impl Search {
           true => 1,
           false => {
             let end_node = self.end.unwrap();
-            get_distance(*x, *y, end_node.x, end_node.y)
-          },
+            get_distance(x, y, end_node.x, end_node.y)
+          }
         };
 
         Node::new(
           parent,
-          *x,
-          *y,
+          x,
+          y,
           match parent {
-            None => *cost,
+            None => cost,
             Some(parent) => parent.cost + cost,
           },
-          distance
+          distance,
         )
-      },
+      }
     }
   }
 
   pub fn check_adjacent_node(&mut self, grid: &Grid, source_node: &Node, x: i32, y: i32) {
     let adjacent_x = source_node.x + x;
     let adjacent_y = source_node.y + y;
-    let adjacent_cost = grid.get_coord_cost(&adjacent_x, &adjacent_y);
+    let adjacent_cost = grid.get_coord_cost(adjacent_x, adjacent_y);
 
-    if grid.is_coord_walkable(&adjacent_x, &adjacent_y) & can_afford(source_node, adjacent_cost, self.opts.cost_threshold.as_ref()) {
-      let mut adjacent_node = self.coordinate_to_node(
-        Some(source_node),
-        &adjacent_x,
-        &adjacent_y,
-        adjacent_cost
-      );
+    if grid.is_coord_walkable(adjacent_x, adjacent_y)
+      & can_afford(
+        source_node,
+        adjacent_cost,
+        match self.opts.path_closest {
+          true => None,
+          _ => self.opts.cost_threshold,
+        },
+      )
+    {
+      let mut adjacent_node =
+        self.coordinate_to_node(Some(source_node), adjacent_x, adjacent_y, adjacent_cost);
 
       if !adjacent_node.visited {
         self.push(adjacent_node);
@@ -147,7 +149,6 @@ impl Search {
     }
   }
 
-
   pub fn traversed_nodes(&self) -> Vec<&Node> {
     let nodes = &mut vec![];
     for list in self.cache.values() {
@@ -157,10 +158,10 @@ impl Search {
   }
 }
 
-fn can_afford(node: &Node, cost: &i32, cost_threshold: Option<&i32>) -> bool {
+fn can_afford(node: &Node, cost: i32, cost_threshold: Option<i32>) -> bool {
   match cost_threshold {
     None => true,
-    Some(cost_threshold) => node.cost + cost <= *cost_threshold,
+    Some(cost_threshold) => node.cost + cost <= cost_threshold,
   }
 }
 

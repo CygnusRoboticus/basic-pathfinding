@@ -1,6 +1,5 @@
 use std::cmp::Ordering;
 
-// #[module = "Coord"]
 #[derive(Default, Eq, Clone, Copy, Serialize, Deserialize, Debug)]
 pub struct Coord {
   pub x: i32,
