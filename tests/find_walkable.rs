@@ -25,7 +25,7 @@ fn only_traverses_walkable_tiles() {
     ..Grid::default()
   };
   let source = vec![Coord::new(1, 2)];
-  let opts = None;
+  let opts = SearchOpts::default();
   let result = find_reachable(&grid, source, opts);
 
   assert_eq!(
@@ -55,7 +55,7 @@ fn searches_from_multiple_sources() {
     ..Grid::default()
   };
   let source = vec![Coord::new(1, 2), Coord::new(4, 2)];
-  let opts = None;
+  let opts = SearchOpts::default();
   let result = find_reachable(&grid, source, opts);
 
   println!("asdf {:?}", result);
@@ -97,7 +97,7 @@ fn avoids_unwalkable_coords() {
   };
 
   let source = vec![Coord::new(1, 2)];
-  let opts = None;
+  let opts = SearchOpts::default();
   let result = find_reachable(&grid, source, opts);
 
   assert_eq!(
@@ -131,7 +131,7 @@ fn avoids_unstoppable_coords() {
   };
 
   let source = vec![Coord::new(1, 2)];
-  let opts = None;
+  let opts = SearchOpts::default();
   let result = find_reachable(&grid, source, opts);
 
   assert_eq!(result.walkable, vec![Coord::new(0, 3), Coord::new(1, 3)]);
@@ -169,7 +169,7 @@ fn cancels_early_with_cost_threshold() {
     cost_threshold: Some(1),
     ..SearchOpts::default()
   };
-  let result = find_reachable(&grid, source, Some(opts));
+  let result = find_reachable(&grid, source, opts);
 
   assert_eq!(
     result.stoppable,
@@ -186,7 +186,7 @@ fn cancels_early_with_cost_threshold() {
     cost_threshold: Some(4),
     ..SearchOpts::default()
   };
-  let result = find_reachable(&grid, source, Some(opts));
+  let result = find_reachable(&grid, source, opts);
 
   assert_eq!(
     result.stoppable,
@@ -230,7 +230,7 @@ fn reports_start_only_when_cost_zero() {
     cost_threshold: Some(0),
     ..SearchOpts::default()
   };
-  let result = find_reachable(&grid, source, Some(opts));
+  let result = find_reachable(&grid, source, opts);
 
   assert_eq!(result.stoppable, vec![Coord::new(1, 2),]);
 }
@@ -254,7 +254,7 @@ fn doesnt_include_unwalkable_start() {
     cost_threshold: Some(4),
     ..SearchOpts::default()
   };
-  let result = find_reachable(&grid, source, Some(opts));
+  let result = find_reachable(&grid, source, opts);
 
   assert_eq!(result.stoppable, vec![]);
 }
@@ -275,7 +275,7 @@ fn navigates_hex_grids() {
   };
 
   let source = vec![Coord::new(1, 1)];
-  let opts = None;
+  let opts = SearchOpts::default();
   let result = find_reachable(&grid, source, opts);
 
   assert_eq!(
@@ -300,7 +300,7 @@ fn navigates_intercardinal_grids() {
   };
 
   let source = vec![Coord::new(1, 1)];
-  let opts = None;
+  let opts = SearchOpts::default();
   let result = find_reachable(&grid, source, opts);
 
   assert_eq!(

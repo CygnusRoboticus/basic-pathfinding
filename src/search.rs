@@ -10,35 +10,38 @@ use crate::node::Node;
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,
   pub end_on_unstoppable: bool,
-  pub path_closest: bool,
+  pub path_to_threshold: bool,
+  pub path_adjacent: bool,
 }
 
 pub struct Search {
   pub start: Coord,
-  pub end: Option<Coord>,
+  pub end: Vec<Coord>,
+  pub dest: Option<Coord>,
   pub heap: BinaryHeap<Node>,
   pub cache: HashMap<i32, HashMap<i32, Node>>,
   pub opts: SearchOpts,
 }
 
 impl Search {
-  pub fn new(start: Coord, end: Option<Coord>, opts: Option<SearchOpts>) -> Search {
+  pub fn new(start: Coord, end: Vec<Coord>, dest: Option<Coord>, opts: SearchOpts) -> Search {
     Search {
       start: start,
+      dest: dest,
       end: end,
       heap: BinaryHeap::new(),
       cache: HashMap::new(),
-      opts: match opts {
-        Some(opts) => opts,
-        None => SearchOpts::default(),
-      },
+      opts: opts,
     }
   }
 
   pub fn reached_destination(&self) -> bool {
-    let end = self.peek();
-    match (self.end, end) {
-      (Some(dest), Some(curr)) => dest.matches(curr.x, curr.y),
+    match self.peek() {
+      Some(curr) => self
+        .end
+        .iter()
+        .find(|c| c.matches(curr.x, curr.y))
+        .is_some(),
       _ => false,
     }
   }
@@ -89,10 +92,7 @@ impl Search {
   }
 
   pub fn is_pathing(&self) -> bool {
-    match self.end {
-      None => false,
-      _ => true,
-    }
+    self.dest.is_some()
   }
 
   pub fn coordinate_to_node(&self, parent: Option<&Node>, x: i32, y: i32, cost: i32) -> Node {
@@ -102,8 +102,8 @@ impl Search {
         let distance = match !self.is_pathing() {
           true => 1,
           false => {
-            let end_node = self.end.unwrap();
-            get_distance(x, y, end_node.x, end_node.y)
+            let dest = self.dest.unwrap();
+            get_distance(x, y, dest.x, dest.y)
           }
         };
 
@@ -130,7 +130,7 @@ impl Search {
       & can_afford(
         source_node,
         adjacent_cost,
-        match self.opts.path_closest {
+        match self.opts.path_to_threshold {
           true => None,
           _ => self.opts.cost_threshold,
         },

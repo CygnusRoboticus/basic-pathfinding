@@ -52,16 +52,15 @@ impl Node {
     nodes.reverse();
 
     let threshold = search.opts.cost_threshold;
-    let fully_path = threshold.is_some() & search.opts.path_closest;
+    let fully_path = threshold.is_some() & search.opts.path_to_threshold;
     let threshold = match threshold {
       None => 0,
       Some(t) => t,
     };
-    let mut cost = 0;
 
     let mut path = vec![];
     for node in nodes.iter() {
-      if !fully_path | (fully_path & (threshold >= (cost + node.cost))) {
+      if !fully_path | (fully_path & (threshold >= node.cost)) {
         path.push(Coord::new(node.x, node.y));
       }
     }

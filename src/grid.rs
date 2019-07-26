@@ -1,3 +1,4 @@
+use crate::coord::Coord;
 use std::collections::HashMap;
 
 #[derive(Copy, Clone, Serialize, Deserialize, Debug)]
@@ -92,6 +93,35 @@ impl Grid {
         }
       }
     }
+  }
+
+  pub fn get_adjacent(&self, coord: &Coord) -> Vec<Coord> {
+    let mut adjacent = vec![];
+    if self.in_grid(coord.x, coord.y - 1) {
+      adjacent.push(Coord::new(coord.x, coord.y - 1));
+    }
+    if !self.is_cardinal() & self.in_grid(coord.x + 1, coord.y - 1) {
+      adjacent.push(Coord::new(coord.x + 1, coord.y - 1));
+    }
+    if self.in_grid(coord.x + 1, coord.y) {
+      adjacent.push(Coord::new(coord.x + 1, coord.y));
+    }
+    if self.is_intercardinal() & self.in_grid(coord.x + 1, coord.y + 1) {
+      adjacent.push(Coord::new(coord.x + 1, coord.y + 1));
+    }
+    if self.in_grid(coord.x, coord.y + 1) {
+      adjacent.push(Coord::new(coord.x, coord.y + 1));
+    }
+    if !self.is_cardinal() & self.in_grid(coord.x - 1, coord.y + 1) {
+      adjacent.push(Coord::new(coord.x - 1, coord.y + 1));
+    }
+    if self.in_grid(coord.x - 1, coord.y) {
+      adjacent.push(Coord::new(coord.x - 1, coord.y));
+    }
+    if self.is_intercardinal() & self.in_grid(coord.x - 1, coord.y - 1) {
+      adjacent.push(Coord::new(coord.x - 1, coord.y - 1));
+    }
+    adjacent
   }
 
   fn get_extra_cost(&self, x: i32, y: i32) -> Option<i32> {

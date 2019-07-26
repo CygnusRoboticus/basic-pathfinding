@@ -10,23 +10,34 @@ pub struct ReachableResult {
   pub walkable: Vec<Coord>,
 }
 
-pub fn find_path(
-  grid: &Grid,
-  start: Coord,
-  end: Coord,
-  opts: Option<SearchOpts>,
-) -> Option<Vec<Coord>> {
-  let end_on_unstoppable = match &opts {
-    None => false,
-    Some(opts) => opts.end_on_unstoppable,
+pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: SearchOpts) -> Option<Vec<Coord>> {
+  let end_on_unstoppable = opts.end_on_unstoppable;
+  let end_coords = match opts.path_adjacent {
+    true => {
+      let mut coords = vec![];
+      for coord in grid.get_adjacent(&end) {
+        if end_on_unstoppable | grid.is_coord_stoppable(coord.x, coord.y) {
+          coords.push(coord);
+        }
+      }
+      coords
+    }
+    false => vec![end],
   };
 
-  if Coord::equals(Some(start), Some(end)) {
+  println!("{:?}", end_coords);
+
+  if end_coords.contains(&start) {
     Some(vec![])
-  } else if !grid.is_coord_stoppable(end.x, end.y) & !end_on_unstoppable {
+  } else if end_coords
+    .iter()
+    .find(|c| grid.is_coord_stoppable(c.x, c.y))
+    .is_none()
+    & !end_on_unstoppable
+  {
     None
   } else {
-    let mut search = Search::new(start, Some(end), opts);
+    let mut search = Search::new(start, end_coords.clone(), Some(end), opts);
     let start_node = search.coordinate_to_node(None, start.x, start.y, 0);
     search.push(start_node);
 
@@ -39,12 +50,8 @@ pub fn find_path(
   }
 }
 
-pub fn find_reachable(
-  grid: &Grid,
-  source: Vec<Coord>,
-  opts: Option<SearchOpts>,
-) -> ReachableResult {
-  let mut search = Search::new(*source.first().unwrap(), None, opts);
+pub fn find_reachable(grid: &Grid, source: Vec<Coord>, opts: SearchOpts) -> ReachableResult {
+  let mut search = Search::new(*source.first().unwrap(), vec![], None, opts);
 
   for coord in source {
     let node = search.coordinate_to_node(None, coord.x, coord.y, 0);

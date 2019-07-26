@@ -26,7 +26,7 @@ fn traverses_walkable_tiles() {
   };
   let start = Coord::new(1, 2);
   let end = Coord::new(3, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
@@ -58,7 +58,7 @@ fn path_avoids_unwalkable_coords() {
   };
   let start = Coord::new(1, 2);
   let end = Coord::new(3, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
@@ -91,7 +91,7 @@ fn early_returns() {
   };
   let start = Coord::new(1, 2);
   let end = Coord::new(1, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(path.unwrap(), vec![]);
@@ -112,7 +112,7 @@ fn none_when_cannot_find_path() {
   };
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert!(path.is_none());
@@ -134,7 +134,7 @@ fn none_when_not_walkable() {
   };
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert!(path.is_none());
@@ -158,7 +158,7 @@ fn none_when_target_unstoppable() {
   };
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert!(path.is_none());
@@ -185,7 +185,7 @@ fn accepts_opt_to_end_on_unstoppable() {
     end_on_unstoppable: true,
     ..SearchOpts::default()
   };
-  let path = find_path(&grid, start, end, Some(opts));
+  let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
     path.unwrap(),
@@ -213,7 +213,7 @@ fn prefers_straight_paths() {
   };
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
@@ -243,7 +243,7 @@ fn respects_costs() {
   };
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
@@ -278,7 +278,7 @@ fn respects_extra_costs() {
   };
   let start = Coord::new(0, 2);
   let end = Coord::new(4, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
@@ -315,7 +315,7 @@ fn path_cancels_early_with_cost_threshold() {
     cost_threshold: Some(3),
     ..SearchOpts::default()
   };
-  let path = find_path(&grid, start, end, Some(opts));
+  let path = find_path(&grid, start, end, opts);
 
   assert!(path.is_none());
 
@@ -323,7 +323,7 @@ fn path_cancels_early_with_cost_threshold() {
     cost_threshold: Some(4),
     ..SearchOpts::default()
   };
-  let path = find_path(&grid, start, end, Some(opts));
+  let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
     path.unwrap(),
@@ -337,7 +337,7 @@ fn path_cancels_early_with_cost_threshold() {
 }
 
 #[test]
-fn path_finds_closest_with_cost_threshold() {
+fn path_terminates_with_cost_threshold() {
   let grid = Grid {
     tiles: vec![
       vec![1, 1, 0, 1, 1],
@@ -353,12 +353,76 @@ fn path_finds_closest_with_cost_threshold() {
   let end = Coord::new(3, 2);
   let opts = SearchOpts {
     cost_threshold: Some(2),
-    path_closest: true,
+    path_to_threshold: true,
     ..SearchOpts::default()
   };
-  let path = find_path(&grid, start, end, Some(opts));
+  let path = find_path(&grid, start, end, opts);
 
   assert_eq!(path.unwrap(), vec![Coord::new(1, 3), Coord::new(2, 3)]);
+}
+
+#[test]
+fn path_navigates_to_adjacent_coord() {
+  let grid = Grid {
+    tiles: vec![
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+    ],
+    walkable_tiles: vec![1],
+    ..Grid::default()
+  };
+  let start = Coord::new(1, 2);
+  let end = Coord::new(3, 2);
+  let opts = SearchOpts {
+    path_adjacent: true,
+    ..SearchOpts::default()
+  };
+  let path = find_path(&grid, start, end, opts);
+
+  assert_eq!(
+    path.unwrap(),
+    vec![Coord::new(1, 3), Coord::new(2, 3), Coord::new(3, 3)]
+  );
+}
+
+#[test]
+fn path_navigates_to_adjacent_walkable_coord() {
+  let grid = Grid {
+    tiles: vec![
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1],
+    ],
+    walkable_tiles: vec![1],
+    unstoppable_coords: hashmap![
+      2 => hashmap![4 => true],
+      3 => hashmap![3 => true]
+    ],
+    ..Grid::default()
+  };
+  let start = Coord::new(1, 2);
+  let end = Coord::new(3, 2);
+  let opts = SearchOpts {
+    path_adjacent: true,
+    ..SearchOpts::default()
+  };
+  let path = find_path(&grid, start, end, opts);
+
+  assert_eq!(
+    path.unwrap(),
+    vec![
+      Coord::new(1, 3),
+      Coord::new(2, 3),
+      Coord::new(3, 3),
+      Coord::new(3, 2),
+      Coord::new(3, 1)
+    ]
+  );
 }
 
 #[test]
@@ -377,7 +441,7 @@ fn path_navigates_hex_grids() {
   };
   let start = Coord::new(1, 1);
   let end = Coord::new(2, 2);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(
@@ -407,7 +471,7 @@ fn path_navigates_intercardinal_grids() {
   };
   let start = Coord::new(1, 1);
   let end = Coord::new(3, 3);
-  let opts = None;
+  let opts = SearchOpts::default();
   let path = find_path(&grid, start, end, opts);
 
   assert_eq!(path.unwrap(), vec![Coord::new(2, 2), Coord::new(3, 3),]);
