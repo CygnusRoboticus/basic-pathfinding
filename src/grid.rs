@@ -14,7 +14,7 @@ impl Default for GridType {
   }
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Clone, Default, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Grid {
   pub tiles: Vec<Vec<i32>>,
