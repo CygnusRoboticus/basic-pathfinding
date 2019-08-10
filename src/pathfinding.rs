@@ -78,8 +78,7 @@ pub fn find_reachable(grid: &Grid, source: Vec<Coord>, opts: SearchOpts) -> Reac
   }
 }
 
-pub fn to_coord_map(coords: Vec<Coord>) -> HashMap<i32, HashMap<i32, bool>> {
-  let hash = &mut HashMap::new();
+pub fn to_coord_map(mut hash: HashMap<i32, HashMap<i32, bool>>, coords: Vec<Coord>) -> HashMap<i32, HashMap<i32, bool>> {
   for Coord { x, y } in coords {
     match hash.get_mut(&y) {
       None => {
