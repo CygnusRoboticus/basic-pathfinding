@@ -19,6 +19,7 @@ impl Default for GridType {
 pub struct Grid {
   pub tiles: Vec<Vec<i32>>,
   pub walkable_tiles: Vec<i32>,
+  pub unstoppable_tiles: Vec<i32>,
   #[serde(default = "HashMap::new")]
   pub costs: HashMap<i32, i32>,
   #[serde(default = "HashMap::new")]
@@ -66,7 +67,8 @@ impl Grid {
   }
 
   pub fn is_coord_stoppable(&self, x: i32, y: i32) -> bool {
-    if get_nested_bool(&self.unstoppable_coords, x, y) {
+    let tile = self.tiles[y as usize][x as usize];
+    if self.unstoppable_tiles.contains(&tile) | get_nested_bool(&self.unstoppable_coords, x, y) {
       false
     } else {
       self.is_coord_walkable(x, y)

@@ -12,7 +12,7 @@ macro_rules! hashmap {
 
 #[test]
 fn converts_to_coord_map() {
-  let map = to_coord_map(vec![
+  let map = to_coord_map(hashmap![], vec![
     Coord::new(1, 2),
     Coord::new(2, 2),
     Coord::new(1, 3),
