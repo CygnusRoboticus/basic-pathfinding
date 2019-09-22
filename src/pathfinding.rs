@@ -25,8 +25,6 @@ pub fn find_path(grid: &Grid, start: Coord, end: Coord, opts: SearchOpts) -> Opt
     false => vec![end],
   };
 
-  println!("{:?}", end_coords);
-
   if end_coords.contains(&start) {
     Some(vec![])
   } else if end_coords
@@ -78,7 +76,10 @@ pub fn find_reachable(grid: &Grid, source: Vec<Coord>, opts: SearchOpts) -> Reac
   }
 }
 
-pub fn to_coord_map(mut hash: HashMap<i32, HashMap<i32, bool>>, coords: Vec<Coord>) -> HashMap<i32, HashMap<i32, bool>> {
+pub fn to_coord_map(
+  mut hash: HashMap<i32, HashMap<i32, bool>>,
+  coords: Vec<Coord>,
+) -> HashMap<i32, HashMap<i32, bool>> {
   for Coord { x, y } in coords {
     match hash.get_mut(&y) {
       None => {

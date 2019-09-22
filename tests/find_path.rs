@@ -389,6 +389,30 @@ fn path_navigates_to_adjacent_coord() {
 }
 
 #[test]
+fn path_cancels_on_unstoppable_coord() {
+  let grid = Grid {
+    tiles: vec![
+      vec![1, 1, 0, 1, 1],
+      vec![1, 1, 0, 2, 1],
+      vec![1, 1, 0, 1, 2],
+      vec![1, 1, 1, 2, 1],
+      vec![1, 1, 1, 1, 1],
+    ],
+    walkable_tiles: vec![1],
+    ..Grid::default()
+  };
+  let start = Coord::new(1, 2);
+  let end = Coord::new(3, 2);
+  let opts = SearchOpts {
+    path_adjacent: true,
+    ..SearchOpts::default()
+  };
+  let path = find_path(&grid, start, end, opts);
+
+  assert_eq!(path, None);
+}
+
+#[test]
 fn path_navigates_to_adjacent_walkable_coord() {
   let grid = Grid {
     tiles: vec![
