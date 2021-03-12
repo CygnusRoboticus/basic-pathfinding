@@ -6,7 +6,6 @@ use crate::grid::Grid;
 use crate::node::Node;
 
 #[derive(Default, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct SearchOpts {
   pub cost_threshold: Option<i32>,
   pub end_on_unstoppable: bool,
