@@ -96,51 +96,42 @@ pub fn to_coord_map(
 }
 
 fn calculate(search: &mut Search, grid: &Grid) {
-  match search.size() {
-    0 => (),
-    _ => {
-      if search.reached_destination() {
-        ()
-      } else {
+    while search.size() != 0 && !search.reached_destination() {
         let mut node = search.pop().unwrap();
         node.visited = true;
         search.cache(node);
 
         // cardinal
         if grid.in_grid(node.x, node.y - 1) {
-          search.check_adjacent_node(grid, &node, 0, -1)
+            search.check_adjacent_node(grid, &node, 0, -1)
         }
         // hex & intercardinal
         if !grid.is_cardinal() & grid.in_grid(node.x + 1, node.y - 1) {
-          search.check_adjacent_node(grid, &node, 1, -1)
+            search.check_adjacent_node(grid, &node, 1, -1)
         }
         // cardinal
         if grid.in_grid(node.x + 1, node.y) {
-          search.check_adjacent_node(grid, &node, 1, 0)
+            search.check_adjacent_node(grid, &node, 1, 0)
         }
         // intercardinal
         if grid.is_intercardinal() & grid.in_grid(node.x + 1, node.y + 1) {
-          search.check_adjacent_node(grid, &node, 1, 1)
+            search.check_adjacent_node(grid, &node, 1, 1)
         }
         // cardinal
         if grid.in_grid(node.x, node.y + 1) {
-          search.check_adjacent_node(grid, &node, 0, 1)
+            search.check_adjacent_node(grid, &node, 0, 1)
         }
         // hex & intercardinal
         if !grid.is_cardinal() & grid.in_grid(node.x - 1, node.y + 1) {
-          search.check_adjacent_node(grid, &node, -1, 1)
+            search.check_adjacent_node(grid, &node, -1, 1)
         }
         // cardinal
         if grid.in_grid(node.x - 1, node.y) {
-          search.check_adjacent_node(grid, &node, -1, 0)
+            search.check_adjacent_node(grid, &node, -1, 0)
         }
         // intercardinal
         if grid.is_intercardinal() & grid.in_grid(node.x - 1, node.y - 1) {
-          search.check_adjacent_node(grid, &node, -1, -1)
+            search.check_adjacent_node(grid, &node, -1, -1)
         }
-
-        calculate(search, grid)
-      }
     }
-  }
 }
