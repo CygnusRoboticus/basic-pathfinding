@@ -12,6 +12,48 @@ macro_rules! hashmap {
 }
 
 #[test]
+fn gives_up() {
+  let grid = Grid {
+    tiles: vec![
+      vec![1, 1, 0, 1, 1, 1],
+      vec![1, 1, 0, 1, 0, 0],
+      vec![1, 1, 0, 0, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1],
+    ],
+    walkable_tiles: vec![1],
+    ..Grid::default()
+  };
+  let start = Coord::new(1, 2);
+  let end = Coord::new(3, 1);
+  let opts = SearchOpts::default();
+  let path = find_path(&grid, start, end, opts);
+
+  assert_eq!(
+    path,
+    None,
+  );
+}
+
+#[test]
 fn traverses_walkable_tiles() {
   let grid = Grid {
     tiles: vec![
